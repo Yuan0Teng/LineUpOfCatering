@@ -1,0 +1,23 @@
+<?php
+require_once dirname(__FILE__) . '/' 
+                               .'../' 
+                               . 'service/SiteAccessService.class.php';
+require_once dirname(__FILE__) . '/' 
+                               .'../' 
+                               . 'utils/Page.class.php';
+$site_id = $_GET['siteId'];
+$page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+$rows = isset($_POST['rows']) ? intval($_POST['rows']) : 10;
+$service = new SiteAccessService();
+$page_class = Page::getInstance();
+$total = $service->get_site_today_counts($site_id,'index');
+$page_class->init( $total
+                , $rows);
+$page_class->toPage($page);
+$rows_data = $service->getLimitedData($site_id,'index'
+                                    ,$page_class->getLimitFirstNum()
+                                    ,$rows);
+$result["total"] = $total;
+$result["rows"] = $rows_data;
+echo json_encode($result);
+?>

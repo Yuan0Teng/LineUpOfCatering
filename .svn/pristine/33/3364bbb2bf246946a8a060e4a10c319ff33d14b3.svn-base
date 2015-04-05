@@ -1,0 +1,19 @@
+<?php
+
+    class LinkToDatabase {
+        public $servername = "localhost";
+        public $username = "root";
+        public $password = "123456";
+
+        public function link() {
+            $conn = new mysqli($this->servername, $this->username, $this->password);
+
+            if ($conn->connect_error) {
+                die("Connection failed:" . $conn->connect_error);
+            }
+            return $conn;
+
+        }
+    }
+
+?>

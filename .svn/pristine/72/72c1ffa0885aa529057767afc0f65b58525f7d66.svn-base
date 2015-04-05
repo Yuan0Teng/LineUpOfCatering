@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!--控制移动设备缩放-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <title>排队软件</title>
+    <!--<link rel="stylesheet" type="text/css" href="css/base.css" />-->
+    <link rel="stylesheet" type="text/css" href="jqueryMobile/jquery.mobile-1.3.2.min.css">
+    <link rel="stylesheet" type="text/css" href="jqueryMobile/jquery.mobile.theme-1.3.2.min.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="easyui/css/easyui.css">
+
+    <script type="text/javascript" src="jqueryMobile/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="jqueryMobile/jquery.mobile-1.3.2.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="easyui/js/jquery.min.js"></script>
+    <script type="text/javascript" src="easyui/js/jquery.easyui.min.js"></script>
+
+
+
+
+
+    <style type="text/css">
+        .left-menu{
+            /*border:solid;*/
+            /*border-radius: 10px;*/
+            background-color: #ffffff;
+            box-shadow:2px 2px 3px #aaaaaa;
+            width:300px;
+            height: auto !important;
+            min-height: 400px;
+            height: 400px;
+            text-align: center;
+            float:left;
+        }
+        .menu-ui-top{
+            /*border:solid 1px;*/
+            /*text-align: center;*/
+            color:#5CACEE;
+           padding-top: 2px;;
+        }
+        .menu-ui-status{
+            /*border:solid 1px;*/
+            /*text-align: center;*/
+        }
+        .menu-ui-img{
+            /*border:solid 1px blue;*/
+            padding:10px 0 0 10px;
+            width:290px;
+        }
+        .menu-ui-add{
+            padding:10px 0 0 7px;
+        }
+        .right-line{
+            /*margin-left: 100px;;*/
+            /*border:dotted;*/
+            box-shadow:2px 2px 3px #aaaaaa;
+            width:auto !important;
+            min-width: 650px;
+            width:650px;
+            height: auto !important;
+            min-height: 700px;
+            height: 700px;
+            text-align: center;
+            margin-left: 20px;;
+            float:left;
+        }
+    </style>
+</head>
+<body>
+    <div data-role="page" >
+        <div data-role="content" data-theme="c">
+            <div class="left-menu">
+                <div class="menu-ui-top">
+                    <h3>五棵松餐厅</h3>
+                </div>
+
+                <div class="menu-ui-status">
+                    <span> <img style='padding-right:10px' src="img/nowait.jpg" height="50px" ></span>
+                    <span ><img style='padding-right:10px' src="img/wait.jpg" height="50px" ></span>
+                    <span><img src="img/stop.png" height="50px" ></span>
+                </div>
+                <div class="menu-ui-img">
+                    <div id="myCarousel" class="carousel slide">
+                        <ol class="carousel-indicators">
+                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#myCarousel" data-slide-to="1"></li>
+                            <li data-target="#myCarousel" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <img src="img/t1.jpg" alt="">
+                            </div>
+                            <div class="item">
+                                <img src="img/t2.jpg"  alt="">
+                            </div>
+                            <div class="item">
+                                <img src="img/t3.jpg" alt="">
+                            </div>
+                        </div>
+                        <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                        <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                    </div><!-- /.carousel -->
+                    <div class="menu-ui-add" >
+                        <a href="#" data-role="button" data-icon="plus" >添加</a>
+                    </div>
+                </div>
+            </div>
+            <div class="right-line">
+
+                    <table id="dg" title="排队人员" style=" margin-left:5px;width:650px;height:700px" data-options="
+				rownumbers:true,
+				singleSelect:true,
+				autoRowHeight:false,
+				pagination:true,
+				pageSize:40">
+                        <thead>
+                        <tr>
+                            <th field="inv" width="10%"  align="center">队列号</th>
+                            <th field="date" width="40%" align="center">手机号</th>
+                            <th field="amount" width="20%" align="center">人数</th>
+                            <th field="price" width="28%" align="center">操作</th>
+
+                        </tr>
+                        </thead>
+                    </table>
+
+            </div>
+
+        </div>
+    </div>
+</body>
+<script>
+    function getData(){
+        var rows = [];
+        for(var i=1; i<=800; i++){
+            var amount = Math.floor(Math.random()*1000);
+            var price = Math.floor(Math.random()*1000);
+            rows.push({
+                inv: i+'号',
+                date: $.fn.datebox.defaults.formatter(new Date()),
+                amount: amount,
+                price: "<img style='padding-right:30px' src='easyui/css/images/ok.png' onclick='alert("+i+");'/>"+"<img src='easyui/css/images/cancel.png' onclick='alert("+i+");'/>"
+            });
+        }
+        return rows;
+    }
+
+    function pagerFilter(data){
+        if (typeof data.length == 'number' && typeof data.splice == 'function'){	// is array
+            data = {
+                total: data.length,
+                rows: data
+            }
+        }
+        var dg = $(this);
+        var opts = dg.datagrid('options');
+        var pager = dg.datagrid('getPager');
+        pager.pagination({
+            onSelectPage:function(pageNum, pageSize){
+                opts.pageNumber = pageNum;
+                opts.pageSize = pageSize;
+                pager.pagination('refresh',{
+                    pageNumber:pageNum,
+                    pageSize:pageSize
+                });
+                dg.datagrid('loadData',data);
+            }
+        });
+        if (!data.originalRows){
+            data.originalRows = (data.rows);
+        }
+        var start = (opts.pageNumber-1)*parseInt(opts.pageSize);
+        var end = start + parseInt(opts.pageSize);
+        data.rows = (data.originalRows.slice(start, end));
+        return data;
+    }
+
+    $(function(){
+        $('#dg').datagrid({loadFilter:pagerFilter}).datagrid('loadData', getData());
+    });
+
+
+
+    $('.carousel').carousel({
+        interval: 2000
+    })
+</script>
+</html>

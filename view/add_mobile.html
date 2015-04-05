@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!--控制移动设备缩放-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <title>增加排队</title>
+
+    <link rel="stylesheet" type="text/css" href="jqueryMobile/jquery.mobile-1.3.2.min.css">
+    <link rel="stylesheet" type="text/css" href="jqueryMobile/jquery.mobile.theme-1.3.2.min.css">
+
+    <script type="text/javascript" src="jqueryMobile/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="jqueryMobile/jquery.mobile-1.3.2.min.js"></script>
+</head>
+<body>
+
+    <div data-role="page">
+        <div data-role="header" data-theme="b">
+            <h1>添加排队</h1>
+        </div>
+        <div data-role="content" data-theme="c">
+            <form method="post" action="" id="form" name="addLine">
+                <div data-role="fieldcontain">
+                    <label for="fname" style="text-align: center; vertical-align: middle;">姓：</label>
+                    <input type="text" name="fname" id="fname" placeholder="请输入您的姓氏"  onblur="checkName();">
+                    <label id="nameCheck"></label>
+                </div>
+
+                <div data-role="fieldcontain" style="text-align: right">
+                    <fieldset data-role="controlgroup" data-type="horizontal">
+                        <label for="male">先生</label>
+                        <input type="radio" name="gender" id="male" value="先生" checked>
+                        <label for="female">女士</label>
+                        <input type="radio" name="gender" id="female" value="女士">
+                    </fieldset>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="cellphone" style="text-align: center; vertical-align: middle;">手机号：</label>
+                    <input type="text" name="cellphone" id="cellphone" placeholder="请输入您的手机号码" onblur="checkPhone();">
+                    <label id="phoneCheck"></label>
+                </div>
+                <div data-role="fieldcontain" style="text-align: right">
+                    <fieldset data-role="controlgroup" data-type="horizontal">
+                        <label for="num1">1-2人</label>
+                        <input type="radio" name="sizes" id="num1" value="2" checked>
+                        <label for="num2">3-4人</label>
+                        <input type="radio" name="sizes" id="num2" value="4">
+                        <label for="num3">5-6人</label>
+                        <input type="radio" name="sizes" id="num3" value="6">
+                        <label for="num4">7人以上</label>
+                        <input type="radio" name="sizes" id="num4" value="7">
+                    </fieldset>
+                </div>
+                <div data-role="fieldcontain" style="text-align: center">
+                    <!--<input type="submit" data-inline="true" value="submit">提交-->
+                    <a href="#" data-role="button" data-rel="back" data-inline="true" onclick="addOne()">提交</a>
+                    <a href="#" data-role="button" data-rel="back" data-inline="true">返回</a>
+                </div>
+            </form>
+
+        </div>
+
+
+</body>
+</html>

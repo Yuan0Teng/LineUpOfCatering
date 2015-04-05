@@ -1,0 +1,48 @@
+<?php
+require_once dirname(__FILE__)."/../utils/CRUDdatabase.php";
+
+$operator = isset($_POST["operator"])?$_POST["operator"]:null;
+$data     = isset($_POST["data"])?$_POST["data"]:null;
+$crud     = new CRUDdatabase();
+
+switch ($operator){
+    case "notice":
+        notice($crud,$data);
+        break;
+    case "cancel":
+        cancel($crud,$data);
+        break;
+    case "add":
+        add($crud,$data);
+        break;
+    default:
+        break;
+}
+
+function notice(CRUDdatabase $crud,$data){
+    if(!is_array($data)){
+        return false;
+    }
+    $id = $data["id"];
+    $crud->updateDatabase($id,1);//已发短信
+    return true;
+}
+function cancel(CRUDdatabase $crud,$data){
+    if(!is_array($data)){
+        return false;
+    }
+    $id = $data["id"];
+    $crud->updateDatabase($id,4);//已发短信
+    return true;
+}
+function add(CRUDdatabase $crud,$data){
+    if(!is_array($data)){
+        return false;
+    }
+    $cell_phone = $data["cell_phone"];
+    $cstmr_name = $data["cstmr_name"];
+    $size       = $data["size"];
+    $status     = 0;//未发短信 正在排队
+    $crud->insertToDatabase($cell_phone,$status,$size,null,$cstmr_name);
+    return true;
+}

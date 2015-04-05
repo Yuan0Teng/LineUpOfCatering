@@ -1,0 +1,41 @@
+<?php
+require_once dirname(__FILE__) . "/../root_path.php"  ;
+require_once ROOT_PATH         . "/utils/GetJsonConf.class.php" ;
+class MysqliAccess {
+
+    private $__conn = null;
+
+    public function getConnection($servername=null,$username=null,$password=null,$database=null,$port=null) {
+        if($servername==null&&$username==null&&$password==null&&$database==null&&$port==null) {
+            $servername = \utils\GetJsonConf::getConf(ROOT_PATH . "/conf/counts.conf.json", "mysql-host");
+            $username   = \utils\GetJsonConf::getConf(ROOT_PATH . "/conf/counts.conf.json", "mysql-username");
+            $password   = \utils\GetJsonConf::getConf(ROOT_PATH . "/conf/counts.conf.json", "mysql-password");
+            $database   = \utils\GetJsonConf::getConf(ROOT_PATH . "/conf/counts.conf.json", "mysql-database");
+            $port       = \utils\GetJsonConf::getConf(ROOT_PATH . "/conf/counts.conf.json", "mysql-port");
+        }
+
+        $this->__conn = new mysqli($servername,$username,$password,$database,$port);
+        $this->__conn->query("SET NAMES utf8");
+        if($this->__conn->connect_error) {
+            return false;
+        }
+
+        return $this->__conn;
+    }
+}
+/*
+$mysql = new MysqliAccess();
+$conn = $mysql->getConnection();
+if($conn->connect_error)
+{
+    die("Connection failed:" . $conn->connect_error);
+}
+$sql = "insert into site_access(site_id,access_time,client_ip"
+ . ",session_client_id) values(1,'2010-10-10','192.168.1.1',1000)";
+if($conn->query($sql)===TRUE)
+{
+    echo 'insert suc';
+}else{
+    echo $conn->error;
+}*/
+//echo 'test connection success<br>';

@@ -1,0 +1,121 @@
+<?php
+    require_once 'linkToDatabase.php';
+
+    class CRUDdatabase {
+        public function insertToDatabase($phoneNum, $status, $howManyPeople,$id,$name) {
+            if (strlen($phoneNum) != 11 || $howManyPeople > 20 || $howManyPeople < 1) {
+                die("input error");
+            }
+            $link = new linkToDatabase();
+            $conn = $link->link();
+            $sql = "insert into line_up  values (" . $id . ", " . $phoneNum . ", " . $name . ", " .  $howManyPeople . ", " . $status . ");";
+            if ($conn->query($sql) === TRUE) {
+//                echo "New record created successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+
+            $conn->close();
+
+        }
+
+        public function deleteFromDatabase($id) {
+
+            $link = new linkToDatabase();
+            $conn = $link->link();
+            $sql = "delete from line_up where id = " . $id . ";";
+
+            if ($conn->query($sql) === TRUE) {
+//                echo "Delete successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+
+            $conn->close();
+        }
+
+        public function updateDatabase($id, $status) {
+            
+            $link = new linkToDatabase();
+            $conn = $link->link();
+            $sql = "update line_up set status = " . $status . "where id = " . $id . ";";
+
+            if ($conn->query($sql) === TRUE) {
+//                echo "Update successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+
+            $conn->close();
+        }
+
+        public function getDataFromDatabase($id) {
+            if (strlen($id) != 11) {
+                die("input error");
+            }
+
+            $link = new linkToDatabase();
+            $conn = $link->link();
+            $sql = "select cell_phone, cstmr_name,  size ,status  from line_up where id = " . $id . ";";
+
+            if ($conn->query($sql) === TRUE) {
+//                echo "Update successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+
+            $conn->close();
+        }
+
+        public function getPageDataFromDatabase($start,$rows) {//PASS
+            if(!(is_numeric($start) && is_numeric($rows))){
+                die("分页查询参数不是整数!");
+            }
+            $link = new linkToDatabase();
+            $conn = $link->link();
+            $sql = "select id,cell_phone, cstmr_name, size from line_up limit $start , $rows;";
+            $pstmt = $conn->prepare($sql);
+            if ($pstmt == null) {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+                die('sql语法错误');
+            }
+            $pstmt->bind_result($id, $cell_phone, $cstmr_name,$size);
+            if (!$pstmt->execute() === TRUE) {
+                $conn->close();
+                return false;
+            }
+            $rows_data = array();//保存结果集
+            while ($pstmt->fetch()) {
+                $row = array("id"=>$id,"cell_phone"=>$cell_phone,"cstmr_name"=>$cstmr_name,"size"=>$size);
+                array_push($rows_data, $row);
+            }
+            $pstmt->close();
+            $conn->close();
+            return $rows_data;
+        }
+
+        public function getTableCount($tableName){
+            $link = new linkToDatabase();
+            $conn = $link->link();
+            $sql = "SELECT COUNT(*) AS row_count from $tableName;";
+            $pstmt = $conn->prepare($sql);
+            //$pstmt->bind_param("s", $tableName);
+            $pstmt->bind_result($row_count);
+            if ($pstmt->execute() === TRUE) {
+                while ($pstmt->fetch()) {
+                }
+                $pstmt->close();
+                $conn->close();
+                return $row_count;
+            }
+            $pstmt->close();
+            $conn->close();
+            return 0;
+        }
+
+    }
+/*
+$test = new CRUDdatabase();
+$result = json_encode($test->getPageDataFromDatabase(1,10));
+echo $result;*/
+//$test = new CRUDdatabase(); $result = $test->getTableCount("line_up");echo $result;
